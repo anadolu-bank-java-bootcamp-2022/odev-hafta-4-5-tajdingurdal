@@ -3,6 +3,7 @@ package com.gokhantamkoc.javabootcamp.odevhafta45.repository;
 import com.gokhantamkoc.javabootcamp.odevhafta45.model.Order;
 import com.gokhantamkoc.javabootcamp.odevhafta45.model.OrderDetail;
 import com.gokhantamkoc.javabootcamp.odevhafta45.model.Owner;
+import com.gokhantamkoc.javabootcamp.odevhafta45.model.Product;
 import com.gokhantamkoc.javabootcamp.odevhafta45.util.DatabaseConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -96,6 +97,35 @@ public class OrderRepository {
 
     public List<OrderDetail> getOrderDetails(long orderId) {
         // BU METHODU 2. GOREV ICIN DOLDURUNUZ
+    	
+        final String SQL = "SELECT * FROM public.order_detail where id = ?;";
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        
+        try (PreparedStatement preparedStatement = databaseConnection.getConnection().prepareStatement(SQL)) {
+            preparedStatement.setLong(1, orderId);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while (rs.next()) {
+            	
+            	long id = rs.getLong("id");
+				String status = rs.getString("status");
+				String type = rs.getString("type");
+				long order_id = rs.getLong("order_id");
+				Order order = this.get(order_id);
+				long productId = rs.getLong("product_id");
+				Product product = this.productRepository.get(productId);
+				Float amount = rs.getFloat("amount");
+				String amountType = rs.getString("amount_type");
+
+				
+				orderDetails.add(new OrderDetail(id, status, type, order, product, amount, amountType));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex.getMessage());
+        }
+        return orderDetails;
+        
     }
 
     public void save(Order order) throws RuntimeException {
