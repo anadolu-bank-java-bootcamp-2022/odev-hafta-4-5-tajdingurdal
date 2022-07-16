@@ -110,8 +110,8 @@ public class OrderRepository {
             	long id = rs.getLong("id");
 				String status = rs.getString("status");
 				String type = rs.getString("type");
-				long order_id = rs.getLong("order_id");
-				Order order = this.get(order_id);
+				//long order_id = rs.getLong("order_id");
+				Order order = this.get(orderId);
 				long productId = rs.getLong("product_id");
 				Product product = this.productRepository.get(productId);
 				Float amount = rs.getFloat("amount");
