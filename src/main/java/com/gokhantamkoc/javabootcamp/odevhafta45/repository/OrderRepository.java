@@ -98,7 +98,10 @@ public class OrderRepository {
     public List<OrderDetail> getOrderDetails(long orderId) {
         // BU METHODU 2. GOREV ICIN DOLDURUNUZ
     	
-        final String SQL = "SELECT * FROM public.order_detail where id = ?;";
+      // final String SQL = "SELECT * FROM public.order_detail where id = ?;";
+       final String SQL = "SELECT * FROM public.order_detail WHERE public.order_detail.order_id = ?;";
+    	 
+        
         List<OrderDetail> orderDetails = new ArrayList<>();
         
         try (PreparedStatement preparedStatement = databaseConnection.getConnection().prepareStatement(SQL)) {
